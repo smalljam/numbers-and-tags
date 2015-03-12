@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="config.def.js"></script>
+    <script src="config.js"></script>
+    <script>
+      NaT = angular.module('NaT', []);
+
+      NaT.service('Firebase', [function(){
+        return new Firebase(FIREBASE_ACCOUNT);
+      }]);
+
+      NaT.controller('MainController', ['$scope', 'Firebase', function($scope, Firebase){        
+
+        $scope.collection = [];
+        $scope.total = 0;
+        $scope.allTags = [];
+
+        $scope.amount = ''
+        $scope.tags = ''
+
+        $scope.addValue = function(){
+          var amount = $scope.amount*1
+          if(!amount || amount != $scope.amount) return false;
+
+          var obj = {
+            tags: $scope.tags.split(' '),
+            value: amount
+          };
+
+          Firebase.push( obj )
+          addToCollection( obj );
+          $scope.amount = ''
+          $scope.tags = ''
+        }
+
+        $scope.addTag = function(tag){
+          if( $scope.tags != '' ) {
+            tag = ' '+tag
+          }
+          $scope.tags += tag
+        }
+
+        Firebase.once('value', function(snapshot) {
+          snapshot.forEach(function(a){
+            // console.log('foreach')
+            addToCollection( a.val() );
+          })
+          $scope.$digest()  
+        })
+        
+        // Firebase.on('child_added', function(snapshot) {
+        //   console.log('child')
+        //   addToCollection( snapshot.val() );
+        //   $scope.$digest()
+        // });
+
+        function addToCollection(value){
+          $scope.collection.push(value)
+          $scope.total += value.value*1
+          addTags(value.tags)
+        }
+
+        function addTags(tags){
+          tags.forEach(function(value){
+            if( $scope.allTags.indexOf(value) == -1 ) {
+              $scope.allTags.push(value)
+            }
+          })
+        }
+
+        
+      }]);
+    </script>
+  </head>
+  <body ng-app="NaT" ng-controller="MainController">
+    <div>
+      <input type="number" ng-model="amount"/>
+      <input type="text" ng-model="tags"/>
+      <button ng-click="addValue()">Add</button>
+    </div>
+
+    <div>
+      <button ng-repeat="tag in allTags" ng-click="addTag(tag)">
+        {{tag}}
+      </button>
+    </div>
+
+    <div ng-repeat="item in collection.slice().reverse()">
+      {{key}} {{item}}
+    </div>
+    <p>TOTAL: <span id="total">{{total}}</span>$</p>
+  </body>
+</html>

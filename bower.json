@@ -1,0 +1,24 @@
+{
+  "name": "numbers-and-tags",
+  "version": "0.0.0",
+  "authors": [
+    "Anton Iatsenko <anton.yacenko@gmail.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.14",
+    "firebase": "~2.2.2",
+    "underscore": "~1.8.2"
+  }
+}
