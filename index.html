@@ -35,6 +35,7 @@
           addToCollection( obj );
           $scope.amount = ''
           $scope.tags = ''
+          document.getElementById('number').focus()
         }
 
         $scope.addTag = function(tag){
@@ -77,11 +78,11 @@
     </script>
   </head>
   <body ng-app="NaT" ng-controller="MainController">
-    <div>
-      <input type="number" ng-model="amount"/>
+    <form ng-submit="addValue()">
+      <input type="number" ng-model="amount" id="number"/>
       <input type="text" ng-model="tags"/>
-      <button ng-click="addValue()">Add</button>
-    </div>
+      <button>Add</button>
+    </form>
 
     <div>
       <button ng-repeat="tag in allTags" ng-click="addTag(tag)">
