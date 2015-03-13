@@ -9,6 +9,7 @@ body {
   margin-left: -10px;
   margin-top: 4%;
   margin-bottom: -10px;
+  text-align: center;
 }
 
 a.tag {
@@ -18,15 +19,12 @@ a.tag {
 }
 
 .new-record {
-  border: 1px solid #cbcbcb;
-  padding: 4%;
   margin-bottom: 4%;
   position: relative;
 }
 .show_tags {
+  float: left;
+  line-height: 200%;
   width: 100%;
-  text-align: right;
-  position: absolute;
-  bottom: -20px;
-  left: 0;
+  text-align: center;
 }
