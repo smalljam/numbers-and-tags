@@ -67,15 +67,15 @@ NaT.controller('MainController', ['$scope', 'Firebase', function($scope, Firebas
       })
     });
 
-    var tagsPriceCollection = [];
-    _.each( _.keys(tagsPriceMap), function(key){
-      tagsPriceCollection.push({
-        tag:key,
-        value:tagsPriceMap[key]
-      })
-    });
+    // var tagsPriceCollection = [];
+    // _.each( _.keys(tagsPriceMap), function(key){
+    //   tagsPriceCollection.push({
+    //     tag:key,
+    //     value:tagsPriceMap[key]
+    //   })
+    // });
 
-    $scope.tagsPrice = tagsPriceCollection;
+    // $scope.tagsPrice = tagsPriceCollection;
   }
 
   function addTags(tags){
