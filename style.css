@@ -1,0 +1,32 @@
+body {
+  padding: 4%;
+}
+
+.w100 {
+  width: 100%;
+}
+.tags {
+  margin-left: -10px;
+  margin-top: 4%;
+  margin-bottom: -10px;
+}
+
+a.tag {
+  display: inline-block;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.new-record {
+  border: 1px solid #000;
+  padding: 4%;
+  margin-bottom: 4%;
+  position: relative;
+}
+.show_tags {
+  width: 100%;
+  text-align: right;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+}

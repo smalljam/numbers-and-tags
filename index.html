@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="style.css"/>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
@@ -12,87 +14,41 @@
       NaT.service('Firebase', [function(){
         return new Firebase(FIREBASE_ACCOUNT);
       }]);
-
-      NaT.controller('MainController', ['$scope', 'Firebase', function($scope, Firebase){        
-
-        $scope.collection = [];
-        $scope.total = 0;
-        $scope.allTags = [];
-
-        $scope.amount = ''
-        $scope.tags = ''
-
-        $scope.addValue = function(){
-          var amount = $scope.amount*1
-          if(!amount || amount != $scope.amount) return false;
-
-          var obj = {
-            tags: $scope.tags.split(' '),
-            value: amount
-          };
-
-          Firebase.push( obj )
-          addToCollection( obj );
-          $scope.amount = ''
-          $scope.tags = ''
-          document.getElementById('number').focus()
-        }
-
-        $scope.addTag = function(tag){
-          if( $scope.tags != '' ) {
-            tag = ' '+tag
-          }
-          $scope.tags += tag
-        }
-
-        Firebase.once('value', function(snapshot) {
-          snapshot.forEach(function(a){
-            // console.log('foreach')
-            addToCollection( a.val() );
-          })
-          $scope.$digest()  
-        })
-        
-        // Firebase.on('child_added', function(snapshot) {
-        //   console.log('child')
-        //   addToCollection( snapshot.val() );
-        //   $scope.$digest()
-        // });
-
-        function addToCollection(value){
-          $scope.collection.push(value)
-          $scope.total += value.value*1
-          addTags(value.tags)
-        }
-
-        function addTags(tags){
-          tags.forEach(function(value){
-            if( $scope.allTags.indexOf(value) == -1 ) {
-              $scope.allTags.push(value)
-            }
-          })
-        }
-
-        
-      }]);
     </script>
+    <script src="controller.js"></script>
   </head>
   <body ng-app="NaT" ng-controller="MainController">
-    <form ng-submit="addValue()">
-      <input type="number" ng-model="amount" id="number"/>
-      <input type="text" ng-model="tags"/>
-      <button>Add</button>
-    </form>
+    <div class="container-fluid">
+      
+        <form ng-submit="addValue()" class="pure-form new-record">
+          <div class="pure-g">
+            <div class="pure-u-7-24">
+              <input type="number" required ng-model="amount" id="number" placeholder="0" class="w100" style="font-size: 150%;"/>
+            </div>
+            <div class="pure-u-1-24"></div>
+            <div class="pure-u-10-24">
+              <textarea ng-model="tags" required placeholder="food, sandwiches" class="w100" style="font-size: 100%;" rows="2"></textarea><br>
+            </div>
+            <div class="pure-u-1-24"></div>
+            <div class="pure-u-5-24">
+              <button class="pure-button pure-button-primary w100" style="font-size: 150%;">Add</button>
+            </div>
+          </div>
+          <div class="tags" ng-if="show_tags">
+            <a class="pure-button tag" ng-repeat="tag in allTags" ng-click="addTag(tag)">{{tag}}</a>
+          </div>
+          <div class="show_tags">
+            <a href="#" ng-click="showTags(true)" ng-if="!show_tags">show tags</a>
+            <a href="#" ng-click="showTags(false)" ng-if="show_tags">hide tags</a>
+          </div>
+        </form>
 
-    <div>
-      <button ng-repeat="tag in allTags" ng-click="addTag(tag)">
-        {{tag}}
-      </button>
-    </div>
+      <div ng-repeat="item in collection.slice().reverse()">
+        {{key}} {{item}}
+      </div>
+      <p>TOTAL: <span id="total">{{total}}</span>$</p>
 
-    <div ng-repeat="item in collection.slice().reverse()">
-      {{key}} {{item}}
+      <div ng-repeat="item in tagsPrice">{{item.tag}} — {{item.value}}</div>
     </div>
-    <p>TOTAL: <span id="total">{{total}}</span>$</p>
   </body>
 </html>
